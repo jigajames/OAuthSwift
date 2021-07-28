@@ -24,6 +24,8 @@ open class OAuth2Swift: OAuthSwift {
     /// cases, like with Imgur, the url needs to be encoded only once and this value needs to be set to `false`.
     open var encodeCallbackURLQuery: Bool = true
 
+    open var authParameters: [String: Any] = [:]
+
     var consumerKey: String
     var consumerSecret: String
     var authorizeUrl: String
@@ -209,6 +211,7 @@ open class OAuth2Swift: OAuthSwift {
         parameters["client_id"] = self.consumerKey
         parameters["code"] = code
         parameters["grant_type"] = "authorization_code"
+        parameters.merge(authParameters) { (_, new) in new }
 
         // PKCE - extra parameter
         if let codeVerifier = self.codeVerifier {
